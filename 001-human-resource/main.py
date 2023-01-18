@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
+import tensorflow as tf
 
 employee_df = pd.read_csv('./001-human-resource/Human_Resources.csv')
 # pd.set_option('display.max_columns', None)
@@ -47,15 +48,35 @@ model_lr = LogisticRegression()
 model_lr.fit(X_train, y_train)
 y_pred_lr = model_lr.predict(X_test)
 
-print("\n\n############## LogisticRegression ################")
-print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_lr, y_test)))
-print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_lr)))
 
 
 model_rf = RandomForestClassifier()
 model_rf.fit(X_train, y_train)
 y_pred_rf = model_rf.predict(X_test)
 
+model_dl = tf.keras.models.Sequential()
+model_dl.add(tf.keras.layers.Dense(units=500, activation='relu', input_shape=(50, )))
+model_dl.add(tf.keras.layers.Dense(units=500, activation='relu'))
+model_dl.add(tf.keras.layers.Dense(units=500, activation='relu'))
+model_dl.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
+
+model_dl.compile(optimizer='Adam', loss='binary_crossentropy', metrics = ['accuracy'])
+
+# oversampler = SMOTE(random_state=0)
+# smote_train, smote_target = oversampler.fit_sample(X_train, y_train)
+# epochs_hist = model.fit(smote_train, smote_target, epochs = 100, batch_size = 50)
+epochs_hist = model_dl.fit(X_train, y_train, epochs = 100, batch_size = 50)
+
+y_pred_dl = model_dl.predict(X_test)
+y_pred_dl = (y_pred_dl > 0.5)
+
+print("\n\n############## LogisticRegression ################")
+print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_lr, y_test)))
+print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_lr)))
+
 print("\n\n############## Random Forest ################")
 print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_rf, y_test)))
 print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_rf)))
+
+print("\n\n############## Deep Learning ################")
+print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_dl)))

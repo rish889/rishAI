@@ -42,10 +42,10 @@ y = employee_df['Attrition']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
-model = LogisticRegression()
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
+model_lr = LogisticRegression()
+model_lr.fit(X_train, y_train)
+y_pred_lr = model_lr.predict(X_test)
 
 print("\n\n############## LogisticRegression ################")
-print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred, y_test)))
-print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred)))
+print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_lr, y_test)))
+print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_lr)))

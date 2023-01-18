@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
+from sklearn.ensemble import RandomForestClassifier
 
 employee_df = pd.read_csv('./001-human-resource/Human_Resources.csv')
 # pd.set_option('display.max_columns', None)
@@ -49,3 +50,12 @@ y_pred_lr = model_lr.predict(X_test)
 print("\n\n############## LogisticRegression ################")
 print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_lr, y_test)))
 print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_lr)))
+
+
+model_rf = RandomForestClassifier()
+model_rf.fit(X_train, y_train)
+y_pred_rf = model_rf.predict(X_test)
+
+print("\n\n############## Random Forest ################")
+print("\nAccuracy : {} %".format(100 * accuracy_score(y_pred_rf, y_test)))
+print("\nClassification Report : \n{} %".format(classification_report(y_test, y_pred_rf)))
